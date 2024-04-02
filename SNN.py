@@ -35,10 +35,18 @@ class SNNMultiStepMode(nn.Module):
         # 根据输入的神经元生成初始化的v
         if self.v is None:
             self.v = torch.zeros((batch_size, feature_size))
+            self.v.to(x.device)
         elif self.v.size() != torch.Size((batch_size, feature_size)):
             raise ValueError('Size diff! Please reset network.')
+        hidden_seq = []
         for t in range(seq_size):
             x_t = x[:, t, :]
             self.neuronal_charge(x_t)
             spike = self.neuronal_fire()
             self.neuronal_reset(spike)
+            hidden_seq += [spike]
+
+        hidden_seq = torch.cat(hidden_seq, dim=0)
+        # reshape from shape (sequence, batch, feature) to (batch, sequence, feature)
+        hidden_seq = hidden_seq.transpose(0, 1).contiguous()
+        return hidden_seq
