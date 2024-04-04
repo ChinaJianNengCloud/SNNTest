@@ -11,7 +11,13 @@ class SNN(nn.Module):
             layer.Linear(features, features // 4, step_mode='m'),
             layer.Dropout(step_mode='m'),
             layer.Linear(features // 4, features, step_mode='m'),
+            # layer.Dropout(step_mode='m'),
             neuron.LIFNode(tau=tau, surrogate_function=surrogate.ATan(), step_mode='m'),
+            # layer.Linear(features, features // 4, step_mode='m'),
+            # layer.Dropout(step_mode='m'),
+            # layer.Linear(features // 4, features, step_mode='m'),
+            # layer.Dropout(step_mode='m'),
+            # neuron.LIFNode(tau=tau, surrogate_function=surrogate.ATan(), step_mode='m'),
         )
 
     def forward(self, x: torch.Tensor):

@@ -1,7 +1,8 @@
 import os
 
-import torch
 from torch.utils.data import Dataset
+
+from utils.file import read_file
 
 
 class SNNDataset(Dataset):
@@ -15,14 +16,7 @@ class SNNDataset(Dataset):
 
     def __getitem__(self, index):
         file_path = self.file_paths[index]
-        with open(file_path) as f:
-            lines = f.read().split('\n')
-        data = torch.zeros((self.row, self.col))
-        for line in lines:
-            row, col, _ = line.split(' ')
-            data[int(row), int(col)] = 1
-        # 转成(t, features)
-        return data.t()
+        return read_file(file_path, self.row, self.col)
 
     def __len__(self):
         return len(self.file_paths)

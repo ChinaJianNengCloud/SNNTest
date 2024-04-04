@@ -1,46 +1,4 @@
-from datetime import datetime
-import random
-import torch
 import numpy as np
-from sklearn.metrics import confusion_matrix
-
-
-def setup_seed(seed: int):
-    """
-    保证每次实验的结果是一样的
-    :param seed: 随机数种子
-    :return:
-    """
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    torch.backends.cudnn.deterministic = True
-
-
-def datetime_now_str() -> str:
-    # 获取处理后的时间
-    return datetime.now().strftime('%Y%m%d%H%M%S')
-
-
-def count_metrics_binary_classification(y_true: list, y_pred: list):
-    """
-    计算指标（二分类）
-    :param y_true: 真实值
-    :param y_pred: 预测值
-    :return:
-    """
-    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
-    tpr = tp / (tp + fn)
-    fpr = fp / (tn + fp)
-    ks = abs(tpr - fpr)
-    sp = 1 - fpr
-    acc = (tp + tn) / (tp + fn + tn + fp)
-    mcc = (tp * tn - fp * fn) / ((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)) ** 0.5
-    precision = tp / (tp + fp)
-    recall = tp / (tp + fn)
-    f1 = 2 * precision * recall / (precision + recall)
-    return locals()
 
 
 class LossEarlyStopping:

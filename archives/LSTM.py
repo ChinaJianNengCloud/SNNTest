@@ -1,8 +1,7 @@
-from typing import Tuple
+import math
 
 import torch
-import math
-from torch import nn, Tensor, init
+from torch import nn, init
 
 
 class MyLSTM(nn.Module):
